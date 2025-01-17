@@ -65,7 +65,8 @@ This project is a primitive implementation of a neural network written in **C++*
 
    ```
 
-   • Ensure that you update the <mark>data_file</mark> value to one that matches the location of your data file.
+   • Ensure that you update the <mark>data_file</mark> value to one that matches the location of your data file.  
+   • Note that the rest of these settings assume that you are working with the mnist training data. If you are not, then you must update these settings with those appropriate for your data file.
 
 3. The path to the MNIST dataset is hardcoded in `neural_network.h`. Update the following constant with the location of your dataset file:
 
