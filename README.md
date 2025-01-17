@@ -106,10 +106,10 @@ const std::string MNIST_PATH = "/absolute/path/to/your/mnist_train.csv";
     Digit 0: 1.00 Digit 1: 1.00 Digit 2: 1.00 Digit 3: 1.00 Digit 4: 1.00 Digit 5: 1.00 Digit 6: 1.00 Digit 7: 1.00 Digit 8: 0.99 Digit 9: 0.99
     ```
 
-    **Note**: The above output is an example. Your results may vary depending on:
-    • Random initialization of weights.
-    • Specific dataset splits (training vs. validation).
-    • System differences (e.g., floating-point precision, library versions).
+    **Note**: The above output is an example. Your results may vary depending on:  
+    • Random initialization of weights.  
+    • Specific dataset splits (training vs. validation).  
+    • System differences (e.g., floating-point precision, library versions).  
     • Adjustments to configuration parameters.
 
 ## Disclaimer
