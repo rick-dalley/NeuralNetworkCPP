@@ -32,7 +32,7 @@ This project is a primitive implementation of a neural network written in **C++*
    - A modern C++ compiler (e.g., GCC, Clang, or MSVC) that supports C++11 or later.
 
 3. **Development Environment**:
-   - Tested on Xcode, but it should work with any C++ IDE or build tool (e.g., Visual Studio, CMake).
+   - Tested on Xcode and VSCode, but it should work with any C++ IDE or build tool (e.g., Visual Studio, CMake).
 
 ---
 
