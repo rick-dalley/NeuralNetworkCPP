@@ -1,0 +1,14 @@
+{
+  "data_file": "/path/to/your/data",
+  "label_column": 0,
+  "input_nodes": 500,
+  "hidden_nodes": 100,
+  "scaling_factor": 255.0,
+  "epochs": 1,
+  "lines_in_file": 60000,
+  "batch_size": 32,
+  "output_classes": 10,
+  "learning_rate": 0.3,
+  "shuffle_data": true,
+  "validation_split": 0.1
+}

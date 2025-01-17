@@ -1,0 +1,17 @@
+#ignore the training data - too big for GitHub
+mnist/
+
+#ignore the build directory
+build/
+
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
