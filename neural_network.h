@@ -22,6 +22,7 @@ class neuralNetwork {
     std::mt19937 gen; // Random number generator
 
     float learningRate = 0.3;
+    float scalingFactor = 1.0;
     Matrix<float> inputHiddenWeights;
     Matrix<float> hiddenOutputWeights;
     std::string dataFile;
@@ -32,7 +33,7 @@ class neuralNetwork {
     std::vector<float> confidenceChanges;
 
 public:
-    neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, std::string dataFile);
+    neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, float scalingFactor, std::string dataFile);
     static neuralNetwork fromConfigFile(const std::string& configFileLocation);
     void initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer);
     void setLearningRate(float newLearningRate);

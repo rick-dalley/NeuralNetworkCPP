@@ -11,7 +11,7 @@
 #include "neural_network.h"
    
 
-// loadMINST using std::getline
+// load data using std::getline
 void neuralNetwork::loadData() {
     std::ifstream file(dataFile);
     std::string line;
@@ -29,7 +29,7 @@ void neuralNetwork::loadData() {
         
         // Read the pixel values
         while (std::getline(ss, value, ',')) {
-            row.push_back(std::stof(value) / 255.0f); // Normalize to [0, 1]
+            row.push_back(std::stof(value) / scalingFactor); // Normalize to [0, 1]
         }
         data.push_back(row);
     }
@@ -86,11 +86,12 @@ void printFirstImageInVector(std::vector<std::vector<float>>& images, std::vecto
     
 }
 
-neuralNetwork::neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, std::string dataFile)
+neuralNetwork::neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, float scalingFactor, std::string dataFile)
 : inputNodes(inputNodes),
   hiddenNodes(hiddenNodes),
   outputNodes(outputNodes),
   learningRate(learningRate),
+  scalingFactor(scalingFactor),
   dataFile(dataFile),
   inputHiddenWeights(hiddenNodes, inputNodes, 0.0f),
   hiddenOutputWeights(outputNodes, hiddenNodes, 0.0f)
@@ -106,6 +107,7 @@ neuralNetwork neuralNetwork::fromConfigFile(const std::string& configFileLocatio
     int hiddenNodes = 0;
     int outputNodes = 0;
     float learningRate = 0.0f;
+    float scalingFactor = 0.0f;
     std::string dataFile;
 
     // Load the configuration
@@ -124,6 +126,7 @@ neuralNetwork neuralNetwork::fromConfigFile(const std::string& configFileLocatio
         hiddenNodes = config.at("hidden_nodes").get<int>();
         outputNodes = config.at("output_classes").get<int>();
         learningRate = config.at("learning_rate").get<float>();
+        scalingFactor = config.at("scaling_factor").get<float>();
         dataFile = config.at("data_file").get<std::string>();
 
     } catch (const std::exception& e) {
@@ -131,7 +134,7 @@ neuralNetwork neuralNetwork::fromConfigFile(const std::string& configFileLocatio
     }
 
     // Use the non-static constructor to create the neuralNetwork object
-    return neuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate, dataFile);
+    return neuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate, scalingFactor, dataFile);
 }
 
 void neuralNetwork::initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer) {
