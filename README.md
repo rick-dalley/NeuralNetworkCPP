@@ -44,7 +44,28 @@ This project is a primitive implementation of a neural network written in **C++*
    cd NeuralNetwork
    ```
 2. Add the MNIST dataset:
-   • Place mnist_train.csv (training data) in the Data/mnist directory.
+   • Place mnist_train.csv (training data) in the Data/mnist directory.  
+   • Create a config.json file in the same directory and ensure that you use this format:
+
+   ```config.json
+   {
+      "data_file": "/path/to/your/data",
+      "label_column": 0,
+      "input_nodes": 500,
+      "hidden_nodes": 100,
+      "scaling_factor": 255.0,
+      "epochs": 1,
+      "lines_in_file": 60000,
+      "batch_size": 32,
+      "output_classes": 10,
+      "learning_rate": 0.3,
+      "shuffle_data": true,
+      "validation_split": 0.1
+   }
+
+   ```
+
+   • Ensure that you update the <mark>data_file</mark> value to one that matches the location of your data file.
 
 3. The path to the MNIST dataset is hardcoded in `neural_network.h`. Update the following constant with the location of your dataset file:
 
@@ -56,7 +77,7 @@ const std::string MNIST_PATH = "/absolute/path/to/your/mnist_train.csv";
 4.  Build and run the project:
     • Compile using your preferred method or IDE.
     • Run the program to train the neural network and view the confidence levels for each digit after a number of training runs (epochs).
-    • CMakeList.txt has been included
+    • CMakeList.txt has been provided
 
 ## Disclaimer
 
