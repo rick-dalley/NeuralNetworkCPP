@@ -77,7 +77,7 @@ const std::string MNIST_PATH = "/absolute/path/to/your/mnist_train.csv";
 
 4.  Build and run the project:  
     • Compile using your preferred method or IDE.  
-    • Run the program to train the neural network and view the confidence levels for each digit after a number of training runs (epochs).
+    • Run the program to train the neural network and view the confidence levels for each digit after a number of training runs (epochs).  
     • CMakeList.txt has been provided
 
 ## Disclaimer
