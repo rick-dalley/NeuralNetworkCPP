@@ -89,7 +89,26 @@ public:
             }
         }
     }
-    
+
+    std::vector<T> toVector() const {
+        std::vector<T> result;
+
+        if (rows == 1) {
+            // Row vector
+            result = data[0];
+        } else if (cols == 1) {
+            // Column vector
+            result.reserve(rows);
+            for (size_t i = 0; i < rows; ++i) {
+                result.push_back(data[i][0]);
+            }
+        } else {
+            throw std::invalid_argument("Matrix is not a vector (1 row or 1 column).");
+        }
+
+        return result;
+    }
+
     Matrix<T> transpose() const {
         Matrix<T> transposed(cols, rows);
         for (size_t i = 0; i < rows; ++i) {

@@ -22,12 +22,11 @@ int main(int argc, const char * argv[]) {
     nn.printConfiguraton();
     //load the images and alter the values from 0-255, to 0 to 1.0
     nn.loadData();
+    //train the network with the data
     nn.train(true);
     // Print the initial configuration of the network
     std::cout << "Summary:" << std::endl;
     nn.printSummary();
-    
-    
     
     return 0;
 }
