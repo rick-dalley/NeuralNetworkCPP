@@ -80,6 +80,38 @@ const std::string MNIST_PATH = "/absolute/path/to/your/mnist_train.csv";
     • Run the program to train the neural network and view the confidence levels for each digit after a number of training runs (epochs).  
     • CMakeList.txt has been provided
 
+5.  Sample Output:  
+     After running the application with the defaults and using the MNIST data set here is the output to the screen that was generated:
+
+    ```Sample Output
+    Neural Network
+    Input Nodes: 784
+    Hidden Nodes: 100
+    Output Nodes: 10
+    Epochs: 1
+    Learning Rate: 0.30
+    Scaling Factor: 255.00
+    Shuffle Data: true
+    Number of Records:60000
+    Validation Split: 0.10
+    Training Records:54000
+
+    Training the network
+
+    Progress: .......... .......... .......... .......... .......... ...
+    Epoch 1/1 - Loss: 0.141404, Accuracy: 97.3722%
+
+    Summary:
+    Confidence vector:
+    Digit 0: 1.00 Digit 1: 1.00 Digit 2: 1.00 Digit 3: 1.00 Digit 4: 1.00 Digit 5: 1.00 Digit 6: 1.00 Digit 7: 1.00 Digit 8: 0.99 Digit 9: 0.99
+    ```
+
+    **Note**: The above output is an example. Your results may vary depending on:
+    • Random initialization of weights.
+    • Specific dataset splits (training vs. validation).
+    • System differences (e.g., floating-point precision, library versions).
+    • Adjustments to configuration parameters.
+
 ## Disclaimer
 
 This project is a training exercise only and is not intended to be a comprehensive or robust implementation of a neural network. While you’re welcome to use this code as a starting point for your own learning, please note the following:  
