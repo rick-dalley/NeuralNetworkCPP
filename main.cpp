@@ -9,8 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
-#include "neural_network.h"
+#include "model.h"
 
+using namespace NeuralNetwork;
 
 // main
 int main(int argc, const char * argv[]) {
@@ -18,15 +19,15 @@ int main(int argc, const char * argv[]) {
     (void) argv;    
     
     //instantiate the neural network
-    auto nn = neuralNetwork::fromConfigFile("/Users/richarddalley/Code/c++/NeuralNetwork/mnist/config.json");
-    nn.printConfiguraton();
+    auto model = Model::fromConfigFile("/Users/richarddalley/Code/c++/NeuralNetwork/mnist/config.json");
+    model.printConfiguraton();
     //load the images and alter the values from 0-255, to 0 to 1.0
-    nn.loadData();
+    model.loadData();
     //train the network with the data
-    nn.train(true);
+    model.train(true);
     // Print the initial configuration of the network
     std::cout << "Summary:" << std::endl;
-    nn.printSummary();
+    model.printSummary();
     
     return 0;
 }

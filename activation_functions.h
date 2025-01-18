@@ -10,20 +10,22 @@
 
 #include <functional>
 #include "matrix.h" // Your Matrix class
+namespace NeuralNetwork{
+    namespace ActivationFunctions {
+        // Function declarations
+        float sigmoid(float x);
+        float sigmoidDerivative(float x);
+        float relu(float x);
+        float reluDerivative(float x);
+        float tanh(float x);
+        float tanhDerivative(float x);
+        float leakyRelu(float x);
+        float leakyReluDerivative(float x);
 
-namespace ActivationFunctions {
-    // Function declarations
-    float sigmoid(float x);
-    float sigmoidDerivative(float x);
-    float relu(float x);
-    float reluDerivative(float x);
-    float tanh(float x);
-    float tanhDerivative(float x);
-    float leakyRelu(float x);
-    float leakyReluDerivative(float x);
+        void apply(NeuralNetwork::Matrix<float>& mat, std::function<float(float)> func);
+        NeuralNetwork::Matrix<float> applyNew(const NeuralNetwork::Matrix<float>& mat, std::function<float(float)> func);
+    };
+}
 
-    void apply(Matrix<float>& mat, std::function<float(float)> func);
-    Matrix<float> applyNew(const Matrix<float>& mat, std::function<float(float)> func);
-};
 
 #endif // ACTIVATION_FUNCTIONS_H

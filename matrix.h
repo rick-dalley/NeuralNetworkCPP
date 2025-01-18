@@ -4,11 +4,13 @@
 //
 //  Created by Richard Dalley on 2025-01-09.
 //
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include <random> // For random number generation
 #include <stdexcept>
 #include <iostream>
-
+namespace NeuralNetwork{
 template <typename T>
 class Matrix{
 private:
@@ -265,3 +267,7 @@ public:
     }
 };
 
+
+}
+
+#endif //MATRIX_H

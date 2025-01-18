@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add the executable for your project
 add_executable(nn
     main.cpp
-    neural_network.cpp
+    model.cpp
     activation_functions.cpp
 )
 

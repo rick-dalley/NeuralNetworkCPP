@@ -8,11 +8,11 @@
 #include <fstream>
 #include <cmath> // For std::pow
 #include <json.hpp>
-#include "neural_network.h"
+#include "model.h"
    
-
+namespace NeuralNetwork{
 // load data using std::getline
-void neuralNetwork::loadData() {
+void Model::loadData() {
     std::ifstream file(dataFile, std::ios::binary);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open data file: " + dataFile);
@@ -91,7 +91,7 @@ void neuralNetwork::loadData() {
 }
 
 
-void neuralNetwork::shuffle(){
+void Model::shuffle(){
     // Create a vector of indices to shuffle
     std::vector<size_t> indices(data.size());
     std::iota(indices.begin(), indices.end(), 0); // Fill with 0, 1, ..., data.size() - 1
@@ -117,7 +117,7 @@ void neuralNetwork::shuffle(){
     labels = std::move(shuffledLabels);
 }
 
-void neuralNetwork::splitData(){
+void Model::splitData(){
     this->splitIndex = static_cast<size_t>(data.size() * (1 - validationSplit));
 
     trainingData.assign(data.begin(), data.begin() + splitIndex);
@@ -139,7 +139,7 @@ void printFirstImageInVector(std::vector<std::vector<float>>& images, std::vecto
     
 }
 
-neuralNetwork::neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, float scalingFactor, bool shuffleData, float validationSplit, std::string dataFile, size_t dataRows)
+Model::Model(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, float scalingFactor, bool shuffleData, float validationSplit, std::string dataFile, size_t dataRows)
 : inputNodes(inputNodes),
   hiddenNodes(hiddenNodes),
   outputNodes(outputNodes),
@@ -160,7 +160,7 @@ neuralNetwork::neuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, f
     initializeWeights(hiddenOutputWeights, hiddenNodes);
 }
 
-neuralNetwork neuralNetwork::fromConfigFile(const std::string& configFileLocation) {
+Model Model::fromConfigFile(const std::string& configFileLocation) {
     // Local variables to hold configuration
     int inputNodes = 0;
     int hiddenNodes = 0;
@@ -199,10 +199,10 @@ neuralNetwork neuralNetwork::fromConfigFile(const std::string& configFileLocatio
     }
 
     // Use the non-static constructor to create the neuralNetwork object
-    return neuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate, scalingFactor, shuffleData, validationSplit, dataFile, dataRows);
+    return Model(inputNodes, hiddenNodes, outputNodes, learningRate, scalingFactor, shuffleData, validationSplit, dataFile, dataRows);
 }
 
-void neuralNetwork::initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer) {
+void Model::initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer) {
     std::normal_distribution<float> dist(0.0f, std::pow(nodesInPreviousLayer, -0.5f));
 
     for (size_t i = 0; i < matrix.getRows(); ++i) {
@@ -212,12 +212,12 @@ void neuralNetwork::initializeWeights(Matrix<float>& matrix, int nodesInPrevious
     }
 }
 
-void neuralNetwork::setLearningRate(float newLearningRate) {
+void Model::setLearningRate(float newLearningRate) {
     this->learningRate = newLearningRate;
 }
 
 
-void neuralNetwork::train(bool showProgress){
+void Model::train(bool showProgress){
 
     float totalLoss = 0.0f; // To track total training loss
     int correctPredictions = 0; // To track training accuracy
@@ -294,7 +294,7 @@ void neuralNetwork::train(bool showProgress){
     }
 }
 
-void neuralNetwork::trainLayer(const std::vector<float>& inputLayer, const std::vector<float>& targetLayer) {
+void Model::trainLayer(const std::vector<float>& inputLayer, const std::vector<float>& targetLayer) {
     Matrix<float> inputs(inputLayer);
     Matrix<float> targets(targetLayer);
 
@@ -324,7 +324,7 @@ void neuralNetwork::trainLayer(const std::vector<float>& inputLayer, const std::
     inputHiddenWeights += weightDeltaInput;
 }
 
-float neuralNetwork::calculateLoss(const std::vector<float>& outputLayer, int trueLabel) {
+float Model::calculateLoss(const std::vector<float>& outputLayer, int trueLabel) {
     float loss = 0.0f;
     for (int i = 0; i < outputNodes; ++i) {
         float predicted = outputLayer[i]; // Assume outputLayer stores probabilities
@@ -334,19 +334,19 @@ float neuralNetwork::calculateLoss(const std::vector<float>& outputLayer, int tr
     return loss;
 }
 
-int neuralNetwork::getPredictedLabel(const std::vector<float>& outputLayer) {
+int Model::getPredictedLabel(const std::vector<float>& outputLayer) {
     return std::distance(outputLayer.begin(),
                          std::max_element(outputLayer.begin(), outputLayer.end()));
 }
 
-void neuralNetwork::printWeights() {
+void Model::printWeights() {
     std::cout << "Randomized Input Weight Matrix:\n";
     inputHiddenWeights.print();
     std::cout << "Randomized Output Weight Matrix:\n";
     hiddenOutputWeights.print();
 }
 
-void neuralNetwork::printSummary(){
+void Model::printSummary(){
         // Print the training summary
         std::cout << "Confidence vector:\n";
         for (size_t digit = 0; digit < digits; ++digit) {
@@ -356,7 +356,7 @@ void neuralNetwork::printSummary(){
 
 }
 
-void neuralNetwork::printConfiguraton() {
+void Model::printConfiguraton() {
     std::stringstream ss;
     ss << "Neural Network\n"
         << "Input Nodes: " << this->inputNodes <<  std::endl
@@ -372,7 +372,7 @@ void neuralNetwork::printConfiguraton() {
     std::cout << ss.str();
 }
 
-Matrix<float> neuralNetwork::forwardPass(std::vector<float>& inputLayer) {
+Matrix<float> Model::forwardPass(std::vector<float>& inputLayer) {
     Matrix<float> inputs(inputLayer);
     Matrix<float> hiddenInputs = inputHiddenWeights * inputs;
     Matrix<float> hiddenOutputs = ActivationFunctions::applyNew(hiddenInputs, ActivationFunctions::sigmoid);
@@ -382,8 +382,10 @@ Matrix<float> neuralNetwork::forwardPass(std::vector<float>& inputLayer) {
     return finalOutputs;
 }
 
-void neuralNetwork::printOutput(std::vector<float>& inputLayer, int index) {
+void Model::printOutput(std::vector<float>& inputLayer, int index) {
     Matrix<float> output = forwardPass(inputLayer);
     std::cout << "\nOutput nodes for " << index << ":" << std::endl;
     output.print();
+}
+
 }
