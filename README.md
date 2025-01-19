@@ -1,4 +1,6 @@
-# Primitive C++ Neural Network
+# C++ Neural Network
+
+WORK IN PROGRESS
 
 This project is a primitive implementation of a neural network written in **C++**, inspired by the ideas presented in _"Make Your Own Neural Network"_ by Tariq Rashid. While the original book uses Python, this project aims to replicate the concepts in C++ as a learning exercise.
 
@@ -6,7 +8,7 @@ This project is a primitive implementation of a neural network written in **C++*
 
 ## Overview
 
-- **Purpose**: This is a simple neural network implementation designed for educational purposes, not a robust production-level neural network library.
+- **Purpose**: This is a neural network implementation designed for educational purposes, not a robust production-level neural network library.
 - **Training Data**: The neural network uses the [MNIST dataset](https://yann.lecun.com/exdb/mnist/) for training and testing. MNIST is a widely used dataset of handwritten digits (0–9).
 - **Output**: After 10 training runs, the network outputs its confidence for each digit (0–9).
 
