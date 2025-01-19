@@ -9,7 +9,10 @@
 #include <cmath> // For std::pow
 #include <json.hpp>
 #include "model.h"
-   
+
+
+using namespace NeuralNetwork::ActivationFunctions;
+
 namespace NeuralNetwork{
 // load data using std::getline
 void Model::loadData() {
@@ -207,17 +210,17 @@ void Model::initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer) {
 
     for (size_t i = 0; i < matrix.getRows(); ++i) {
         for (size_t j = 0; j < matrix.getCols(); ++j) {
-            matrix[i][j] = dist(gen);
+            matrix(i, j) = dist(gen);  // Using () instead of []
         }
     }
 }
-
 void Model::setLearningRate(float newLearningRate) {
     this->learningRate = newLearningRate;
 }
 
-
 void Model::train(bool showProgress){
+ 
+    auto start = std::chrono::high_resolution_clock::now();
 
     float totalLoss = 0.0f; // To track total training loss
     int correctPredictions = 0; // To track training accuracy
@@ -245,7 +248,7 @@ void Model::train(bool showProgress){
             
             
             // Calculate loss for this input
-            std::vector<float> outputLayer = output.toVector(); // Convert Matrix to vector
+            std::vector<float> outputLayer = output.extract(); // Convert Matrix to vector
             float loss = calculateLoss(outputLayer, trainingLabels[i]);
             totalLoss += loss;
 
@@ -292,35 +295,47 @@ void Model::train(bool showProgress){
     if (showProgress){
         std::cout << std::endl;
     }
+    // Capture the end time
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // Calculate the elapsed time
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Training completed in " << duration << " milliseconds." << std::endl;
 }
+
+
 
 void Model::trainLayer(const std::vector<float>& inputLayer, const std::vector<float>& targetLayer) {
     Matrix<float> inputs(inputLayer);
     Matrix<float> targets(targetLayer);
 
     // Make a forward pass - computing hidden and final outputs
-    Matrix<float> hiddenInputs = inputHiddenWeights * inputs;
-    Matrix<float> hiddenOutputs = ActivationFunctions::applyNew(hiddenInputs, ActivationFunctions::sigmoid);
+    Matrix<float> hiddenInputs = inputHiddenWeights.matMul( inputs);
+    Matrix<float> hiddenOutputs = applyNew(hiddenInputs, sigmoid);
 
-    Matrix<float> finalInputs = hiddenOutputWeights * hiddenOutputs;
-    Matrix<float> finalOutputs = ActivationFunctions::applyNew(finalInputs, ActivationFunctions::sigmoid);
+    Matrix<float> finalInputs = hiddenOutputWeights.matMul(hiddenOutputs);
+    Matrix<float> finalOutputs = applyNew(finalInputs, sigmoid);
 
     // Calculate the output errors
     Matrix<float> outputErrors = targets - finalOutputs;
-    Matrix<float> hiddenErrors = hiddenOutputWeights.transpose() * outputErrors;
+    Matrix<float> hiddenErrors = hiddenOutputWeights.transpose().matMul(outputErrors);
 
     // Update weights for hidden-to-output
-    Matrix<float> outputGradients = ActivationFunctions::applyNew(finalOutputs, [](float x) { return x * (1.0f - x); });
+    Matrix<float> outputGradients = applyNew(finalOutputs, [](float x) { return x * (1.0f - x); });
     Matrix<float> scaledOutputErrors = outputErrors * outputGradients;
-    Matrix<float> weightDeltaOutput = scaledOutputErrors * hiddenOutputs.transpose();
+    Matrix<float> weightDeltaOutput = scaledOutputErrors.matMul(hiddenOutputs.transpose());
     weightDeltaOutput = weightDeltaOutput * learningRate;
     hiddenOutputWeights += weightDeltaOutput;
 
     // Update weights for input-to-hidden
-    Matrix<float> hiddenGradients = ActivationFunctions::applyNew(hiddenOutputs, [](float x) { return x * (1.0f - x); });
+    Matrix<float> hiddenGradients = applyNew(hiddenOutputs, [](float x) { return x * (1.0f - x); });
+
     Matrix<float> scaledHiddenErrors = hiddenErrors * hiddenGradients;
-    Matrix<float> weightDeltaInput = scaledHiddenErrors * inputs.transpose();
-    weightDeltaInput = weightDeltaInput * learningRate;
+
+    
+    Matrix<float> weightDeltaInput = scaledHiddenErrors.matMul(inputs.transpose());
+
+    weightDeltaInput *= learningRate;
     inputHiddenWeights += weightDeltaInput;
 }
 
@@ -374,10 +389,10 @@ void Model::printConfiguraton() {
 
 Matrix<float> Model::forwardPass(std::vector<float>& inputLayer) {
     Matrix<float> inputs(inputLayer);
-    Matrix<float> hiddenInputs = inputHiddenWeights * inputs;
-    Matrix<float> hiddenOutputs = ActivationFunctions::applyNew(hiddenInputs, ActivationFunctions::sigmoid);
-    Matrix<float> finalInputs = hiddenOutputWeights * hiddenOutputs;
-    Matrix<float> finalOutputs = ActivationFunctions::applyNew(finalInputs, ActivationFunctions::sigmoid);
+    Matrix<float> hiddenInputs = inputHiddenWeights.matMul(inputs);
+    Matrix<float> hiddenOutputs = applyNew(hiddenInputs, sigmoid);
+    Matrix<float> finalInputs = hiddenOutputWeights.matMul( hiddenOutputs);
+    Matrix<float> finalOutputs = applyNew(finalInputs, sigmoid);
 
     return finalOutputs;
 }

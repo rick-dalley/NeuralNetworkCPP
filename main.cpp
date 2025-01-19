@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     //load the images and alter the values from 0-255, to 0 to 1.0
     model.loadData();
     //train the network with the data
-    model.train(true);
+    model.train(false);
     // Print the initial configuration of the network
     std::cout << "Summary:" << std::endl;
     model.printSummary();
