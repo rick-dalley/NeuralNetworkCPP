@@ -214,9 +214,6 @@ void Model::initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer) {
         }
     }
 }
-void Model::setLearningRate(float newLearningRate) {
-    this->learningRate = newLearningRate;
-}
 
 void Model::train(bool showProgress){
  
@@ -310,20 +307,20 @@ void Model::trainLayer(const std::vector<float>& inputLayer, const std::vector<f
     Matrix<float> targets(targetLayer);
 
     // Make a forward pass - computing hidden and final outputs
-    Matrix<float> hiddenInputs = inputHiddenWeights.matMul( inputs);
+    Matrix<float> hiddenInputs = inputHiddenWeights.dot( inputs);
     Matrix<float> hiddenOutputs = applyNew(hiddenInputs, sigmoid);
 
-    Matrix<float> finalInputs = hiddenOutputWeights.matMul(hiddenOutputs);
+    Matrix<float> finalInputs = hiddenOutputWeights.dot(hiddenOutputs);
     Matrix<float> finalOutputs = applyNew(finalInputs, sigmoid);
 
     // Calculate the output errors
     Matrix<float> outputErrors = targets - finalOutputs;
-    Matrix<float> hiddenErrors = hiddenOutputWeights.transpose().matMul(outputErrors);
+    Matrix<float> hiddenErrors = hiddenOutputWeights.transpose().dot(outputErrors);
 
     // Update weights for hidden-to-output
     Matrix<float> outputGradients = applyNew(finalOutputs, [](float x) { return x * (1.0f - x); });
     Matrix<float> scaledOutputErrors = outputErrors * outputGradients;
-    Matrix<float> weightDeltaOutput = scaledOutputErrors.matMul(hiddenOutputs.transpose());
+    Matrix<float> weightDeltaOutput = scaledOutputErrors.dot(hiddenOutputs.transpose());
     weightDeltaOutput = weightDeltaOutput * learningRate;
     hiddenOutputWeights += weightDeltaOutput;
 
@@ -333,7 +330,7 @@ void Model::trainLayer(const std::vector<float>& inputLayer, const std::vector<f
     Matrix<float> scaledHiddenErrors = hiddenErrors * hiddenGradients;
 
     
-    Matrix<float> weightDeltaInput = scaledHiddenErrors.matMul(inputs.transpose());
+    Matrix<float> weightDeltaInput = scaledHiddenErrors.dot(inputs.transpose());
 
     weightDeltaInput *= learningRate;
     inputHiddenWeights += weightDeltaInput;
@@ -389,9 +386,9 @@ void Model::printConfiguraton() {
 
 Matrix<float> Model::forwardPass(std::vector<float>& inputLayer) {
     Matrix<float> inputs(inputLayer);
-    Matrix<float> hiddenInputs = inputHiddenWeights.matMul(inputs);
+    Matrix<float> hiddenInputs = inputHiddenWeights.dot(inputs);
     Matrix<float> hiddenOutputs = applyNew(hiddenInputs, sigmoid);
-    Matrix<float> finalInputs = hiddenOutputWeights.matMul( hiddenOutputs);
+    Matrix<float> finalInputs = hiddenOutputWeights.dot( hiddenOutputs);
     Matrix<float> finalOutputs = applyNew(finalInputs, sigmoid);
 
     return finalOutputs;

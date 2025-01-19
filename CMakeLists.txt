@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Set the project name and specify that we are using C++
-project(NeuralNetwork LANGUAGES CXX)
+project(NeuralNetworkCPP LANGUAGES CXX)
 
 # Set the C++ standard to use
 set(CMAKE_CXX_STANDARD 20)

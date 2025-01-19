@@ -156,7 +156,7 @@ public:
         return result;
     }
 
-    Matrix<T> matMul(const Matrix<T>& other) const {
+    Matrix<T> dot(const Matrix<T>& other) const {
         if (cols != other.getRows()) {
             throw std::invalid_argument("matMul: Matrix dimensions do not match for multiplication");
         }

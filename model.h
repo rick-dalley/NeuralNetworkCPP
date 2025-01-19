@@ -18,19 +18,20 @@
 
 namespace NeuralNetwork{
     class Model {
+        // private
         int inputNodes = 0;
         int hiddenNodes = 0;
         int outputNodes = 0;
         size_t epochs = 1;
-
         float learningRate = 0.3;
         float scalingFactor = 1.0;
         bool shuffleData = true;
         float validationSplit = 0.1;
         size_t dataRows = 0;
         size_t splitIndex = 0;
-        std::mt19937 gen; // Random number generator
+        size_t digits = 10;
 
+        std::mt19937 gen; // Random number generator
         Matrix<float> inputHiddenWeights;
         Matrix<float> hiddenOutputWeights;
         std::string dataFile;
@@ -40,23 +41,23 @@ namespace NeuralNetwork{
         std::vector<int> labels;   
         std::vector<int> trainingLabels;   
         std::vector<int> validationLabels;   
-        size_t digits = 10;
         std::vector<float> confidenceChanges;
+
+        //methods        
         float calculateLoss(const std::vector<float>& outputLayer, int trueLabel);
         int getPredictedLabel(const std::vector<float>& outputLayer);
-        void trainLayer(const std::vector<float>& inputLayer, const std::vector<float>& targetLayer);
+        Matrix<float> forwardPass(std::vector<float>& inputLayer);
+        void initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer);
         void shuffle();
         void splitData();
-        void initializeWeights(Matrix<float>& matrix, int nodesInPreviousLayer);
-
+        void trainLayer(const std::vector<float>& inputLayer, const std::vector<float>& targetLayer);
+        
     public:
         Model(int inputNodes, int hiddenNodes, int outputNodes, float learningRate, float scalingFactor, bool shuffleData, float validationSplit, std::string dataFile, size_t dataRows);
         static Model fromConfigFile(const std::string& configFileLocation);
-        void setLearningRate(float newLearningRate);
         void train(bool showProgress);
         void printWeights();
         void printConfiguraton();
-        Matrix<float> forwardPass(std::vector<float>& inputLayer);
         void printOutput(std::vector<float>& inputLayer, int index);
         void printSummary();
         void loadData();
