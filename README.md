@@ -42,7 +42,7 @@ This project is a primitive implementation of a neural network written in **C++*
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rick-dalley/NeuralNetwork.git
+   git clone https://github.com/rick-dalley/NeuralNetworkCPP.git
    cd NeuralNetwork
    ```
 2. Add the MNIST dataset:

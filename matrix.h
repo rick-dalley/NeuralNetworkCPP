@@ -32,22 +32,22 @@ public:
     }
 
     Matrix(const std::vector<T>& vec, bool asColumn = true) {
-    if (asColumn) {
-        // Treat the input vector as a column vector
-        rows = vec.size();
-        cols = 1;
-    } else {
-        // Treat the input vector as a row vector
-        rows = 1;
-        cols = vec.size();
-    }
+        if (asColumn) {
+            // Treat the input vector as a column vector
+            rows = vec.size();
+            cols = 1;
+        } else {
+            // Treat the input vector as a row vector
+            rows = 1;
+            cols = vec.size();
+        }
 
-    // Resize the flat vector and copy data
-    data.resize(rows * cols);
-    for (size_t i = 0; i < vec.size(); ++i) {
-        data[i] = vec[i];
+        // Resize the flat vector and copy data
+        data.resize(rows * cols);
+        for (size_t i = 0; i < vec.size(); ++i) {
+            data[i] = vec[i];
+        }
     }
-}
 
     // Method to fill the matrix with random values in the range [-1.0, 1.0]
     void fillRandom() {
